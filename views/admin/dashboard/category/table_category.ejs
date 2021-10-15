@@ -1,0 +1,43 @@
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-modal">
+        <i class="fa fa-plus"></i>
+    </button>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% for( let category = 0; category < categories.length; category++ ) { %>
+                        <tr>
+                            <td><%= category + 1 %></td>
+                            <td><%= categories[category].name %></td>
+                            <td>
+                                <form action="/admin/category/<%= categories[category].id %>?_method=DELETE" method="post">
+                                <a href="javascript:void()" 
+                                    data-id = "<%= categories[category].id %>"
+                                    data-name = "<%= categories[category].name %>"
+                                    type="button" 
+                                    class="btn btn-sm btn-circle btn-warning button-update"> 
+                                    <i class="fa fa-edit"></i> 
+                                </a>
+                                <button type="submit" class="btn btn-sm btn-circle btn-danger">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

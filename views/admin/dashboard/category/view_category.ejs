@@ -1,10 +1,10 @@
-<%- include('layouts/header.ejs') %>
+<%- include('../../../layouts/header.ejs') %>
 
     <!-- Page Wrapper -->
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <%- include('layouts/sidebar.ejs') %>
+        <%- include('../../../layouts/sidebar.ejs') %>
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -14,14 +14,16 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <%- include('layouts/navbar') %>
+                <%- include('../../../layouts/navbar') %>
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-4 text-gray-800">Blank Page</h1>
+                    <h1 class="h3 mb-4 text-gray-800">Dashboard Category</h1>
+
+                    <%- include('table_category.ejs') %>
 
                 </div>
                 <!-- /.container-fluid -->
@@ -30,7 +32,7 @@
             <!-- End of Main Content -->
 
             <!-- Footer -->
-            <%- include('layouts/footer') %>
+            <%- include('../../../layouts/footer') %>
             <!-- End of Footer -->
 
         </div>
@@ -64,6 +66,19 @@
         </div>
     </div>
 
-    <%- include('layouts/js') %>
+    <%- include('modal_add.ejs') %>
+    <%- include('modal_edit.ejs') %>
+    <%- include('../../../layouts/js') %>
+
+    <!-- show modal edit -->
+    <script>
+        $('#dataTable').on('click', '.button-update', function(){
+            let id = $(this).data('id');
+            let name = $(this).data('name');
+            $('#edit-modal').modal('show');
+            $('.name').val(name);
+            $('.id').val(id);
+        })
+    </script>
 
 </html>
