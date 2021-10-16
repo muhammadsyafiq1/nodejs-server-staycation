@@ -1,4 +1,5 @@
 const Category = require('../models/Category');
+const Bank = require('../models/Bank');
 
 module.exports = {
     viewDashboard: (req, res) => {
@@ -31,7 +32,7 @@ module.exports = {
             req.flash('alertStatus','success');
             res.redirect('/admin/category');
         }catch(error) {
-            req.flash('alertMessage',`$error.message`);
+            req.flash('alertMessage',`${error.message}`);
             req.flash('alertStatus','danger');
             res.redirect('/admin/category');
         }
@@ -47,7 +48,7 @@ module.exports = {
             req.flash('alertStatus', 'success');
             res.redirect('/admin/category');
         }catch(error){
-            req.flash('alertMessage', `$error.message`);
+            req.flash('alertMessage', `${error.message}`);
             req.flash('alertStatus','danger');
             res.redirect('/admin/category');
         }
@@ -59,18 +60,64 @@ module.exports = {
             const category = await Category.findOne({_id: id});
             await category.remove();
             req.flash('alertMessage','Success delete category');
-            req.flkash('alertStatus', 'success');
+            req.flash('alertStatus', 'success');
             res.redirect('/admin/category');
         }catch(error){
+            req.flash('alertMessage', `${error.message}`);
             req.flash('alertStatus','danger');
             res.redirect('/admin/category');
         }
     },
 
-    viewBank: (req, res) => {
-        res.render('admin/dashboard/bank/view_bank', {
-            title: "Staycation | bank"
-        });
+    viewBank: async (req, res) => {
+       try{
+            const banks = await Bank.find(); 
+            console.log(banks);
+            const alertMessage = req.flash('alertMessage');
+            const alertStatus = req.flash('alertStatus');
+            const alert = {message: alertMessage, status: alertStatus};
+            res.render('admin/dashboard/bank/view_bank', {
+                alert,
+                title: "Staycation | Bank",
+                banks
+            });
+       }catch(error){
+            res.redirect('/admin/bank')
+       }
+    },
+
+    addBank: async (req, res) => {
+        try{
+            const {name, nameBank, nomorRekening} = req.body;
+            await Bank.create({
+                name, 
+                nameBank, 
+                nomorRekening,
+                imageUrl: `images/${req.file.filename}`
+            });
+            req.flash('alertMessage','Success Add Bank');
+            req.flash('alertStatus','success');
+            res.redirect('/admin/bank')
+        }catch(error){
+            req.flash('alertMessage', `${error.message}`);
+            req.flash('alertStatus','danger');
+            res.redirect('/admin/bank');
+        }
+    },
+
+    deleteBank : async (req, res) => {
+        try{
+            const {id} = req.params;
+            const bank = await Bank.findOne({_id: id});
+            await bank.remove();
+            req.flash('alertMessage','Success delete bank');
+            req.flash('alertStatus','success');
+            res.redirect('/admin/bank');
+        }catch(error){
+            req.flash('alertMessage', `${error.message}`);
+            req.flash('alertStatus','danger');
+            res.redirect('/admin/bank');
+        }
     },
 
    viewItem: (req, res) => {

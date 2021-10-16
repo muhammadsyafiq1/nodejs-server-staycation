@@ -1,6 +1,8 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Bank Tables</h6>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#add-modal">
+            <i class="fa fa-plus"></i>
+        </button>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -11,9 +13,30 @@
                         <th>Nama bank</th>
                         <th>No. Rekening</th>
                         <th>Pemilik</th>
+                        <th>Image</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
+                <tbody>
+                    <% for( let bank = 0; bank < banks.length; bank++ ) { %>
+                        <tr>
+                            <td><%= bank + 1 %></td>
+                            <td><%= banks[bank].name %></td>
+                            <td><%= banks[bank].nomorRekening %></td>
+                            <td><%= banks[bank].nameBank %></td>
+                            <td>
+                                <img src="http://localhost:3300/<%= banks[bank].imageUrl %>" alt="imageUrl" height="70px" width="70px">
+                            </td>
+                            <td>
+                                <form action="/admin/bank/<%= banks[bank].id %>?_method=DELETE" method="post">
+                                    <button type="submit" class="btn btn-sm btn-circle btn-danger">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
             </table>
         </div>
     </div>
