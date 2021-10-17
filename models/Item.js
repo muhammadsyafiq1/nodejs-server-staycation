@@ -24,8 +24,9 @@ const itemSchema = new mongoose.Schema({
     },
     isPopular: {
         type: Boolean,
+        default: false,
     },
-    ImageId: [{
+    imageId: [{
         type: ObjectId,
         ref: 'Image'
     }],
@@ -36,6 +37,10 @@ const itemSchema = new mongoose.Schema({
     activityId: [{
         type: ObjectId,
         ref: 'Activity'
+    }],
+    categoryId: [{
+        type: ObjectId,
+        ref: 'Category'
     }],
 })
 

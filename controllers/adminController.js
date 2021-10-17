@@ -1,5 +1,7 @@
 const Category = require('../models/Category');
 const Bank = require('../models/Bank');
+const Image = require('../models/Image');
+const Item = require('../models/Item');
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -153,10 +155,56 @@ module.exports = {
         }
     },
 
-   viewItem: (req, res) => {
-       res.render('admin/dashboard/item/view_item', {
-           title: "Staycation | item"
-       });
+    // items
+   viewItem: async (req, res) => {
+      try{
+          const alertMessage = req.flash('alertMessage');
+          const alertStatus = req.flash('alertStatus');
+          const alert = {message: alertMessage, status: alertStatus};
+          const categories = await Category.find();
+        res.render('admin/dashboard/item/view_item', {
+            title: "Staycation | item",
+            categories,
+            alert,
+        });
+      }catch(error){
+        req.flash('alertMessage', `${error.message}`);
+        req.flash('alertStatus','danger');
+        res.redirect('/admin/item');
+      }
+   },
+
+   addItem : async (req, res) => {
+        try{
+            const {categoryId,price,title,city,description} = req.body;
+            if(req.files.length > 0){
+                const category = await Category.findOne({ _id : categoryId });
+                const newItem = {
+                    categoryId: category._id,
+                    title,
+                    price,
+                    city,
+                    description,
+                }
+                const item = await Item.create(newItem);
+                category.itemId.push({ _id: item._id });
+                await category.save();
+
+                for( let i = 0; i < req.files.length; i++){
+                    const imageSave = await Image.create({ imageUrl: `images/${req.files[i].filename}` });
+                    item.imageId.push({ _id: imageSave._id });
+                    await item.save();
+                }
+
+                req.flash('alertMessage','Success add item');
+                req.flash('alertStatus','success');
+                res.redirect('/admin/item');
+            }
+        }catch(error){
+            req.flash('alertMessage', `${error.message}`);
+            req.flash('alertStatus','danger');
+            res.redirect('/admin/item');
+        }
    },
 
    viewBooking: (req, res) => {

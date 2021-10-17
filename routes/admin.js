@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const adminController = require('../controllers/adminController');
-const { upload } = require('../middlewares/multer');
+const { upload, uploadMultiple } = require('../middlewares/multer');
 
 router.get('/dashboard',adminController.viewDashboard);
 // category
@@ -16,6 +16,9 @@ router.put('/bank', upload ,adminController.editBank);
 
 // item
 router.get('/item', adminController.viewItem);
+router.post('/item', uploadMultiple, adminController.addItem);
+
+
 router.get('/booking', adminController.viewBooking);
 
 module.exports = router;
