@@ -158,14 +158,20 @@ module.exports = {
     // items
    viewItem: async (req, res) => {
       try{
-          const alertMessage = req.flash('alertMessage');
-          const alertStatus = req.flash('alertStatus');
-          const alert = {message: alertMessage, status: alertStatus};
-          const categories = await Category.find();
+        const items = await Item.find()
+        .populate({ path: 'imageId', select: 'id imageUrl' })
+        .populate({ path: 'categoryId', select: 'id name' });
+        console.log(items);
+        const categories = await Category.find();
+        const alertMessage = req.flash('alertMessage');
+        const alertStatus = req.flash('alertStatus');
+        const alert = {message: alertMessage, status: alertStatus};
         res.render('admin/dashboard/item/view_item', {
             title: "Staycation | item",
             categories,
             alert,
+            items,
+            action : 'view',
         });
       }catch(error){
         req.flash('alertMessage', `${error.message}`);
@@ -206,6 +212,29 @@ module.exports = {
             res.redirect('/admin/item');
         }
    },
+
+   showImageItem : async (req, res) => {
+       try {
+        const { id } = req.params;
+        const item = await Item.findOne({ _id: id })
+            .populate({ path: 'imageId', select: 'id imageUrl' });
+        console.log(item);
+        const alertMessage = req.flash('alertMessage');
+        const alertStatus = req.flash('alertStatus');
+        const alert = {message: alertMessage, status: alertStatus};
+        res.render('admin/dashboard/item/view_item', {
+            title: "Staycation | Show Image Item",
+            alert,
+            item,
+            action: 'show image'
+        });
+       }catch(error){
+        req.flash('alertMessage',`${error.message}`);
+        req.flash('alertStatus', 'danger');
+        res.redirect('/admin/item');
+       }
+   },
+
 
    viewBooking: (req, res) => {
        res.render('admin/dashboard/booking/view_booking', {
