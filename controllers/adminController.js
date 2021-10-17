@@ -1,5 +1,7 @@
 const Category = require('../models/Category');
 const Bank = require('../models/Bank');
+const fs = require('fs-extra');
+const path = require('path');
 
 module.exports = {
     viewDashboard: (req, res) => {
@@ -72,7 +74,7 @@ module.exports = {
     viewBank: async (req, res) => {
        try{
             const banks = await Bank.find(); 
-            console.log(banks);
+            // console.log(banks);
             const alertMessage = req.flash('alertMessage');
             const alertStatus = req.flash('alertStatus');
             const alert = {message: alertMessage, status: alertStatus};
@@ -105,10 +107,41 @@ module.exports = {
         }
     },
 
+    editBank: async (req, res) => {
+        try{
+            const { id, name, nameBank, nomorRekening } = req.body;
+            const bank = await Bank.findOne({_id: id});
+            if(req.file == undefined) {
+                bank.name = name;
+                bank.nameBank = nameBank;
+                bank.nomorRekening = nomorRekening;
+                await bank.save();
+                req.flash('alertMessage','Success update bank');
+                req.flash('alertStatus','success');
+                res.redirect('/admin/bank');
+            } else {
+                await fs.unlink(path.join(`public/${bank.imageUrl}`));
+                bank.name = name;
+                bank.nameBank = nameBank;
+                bank.nomorRekening = nomorRekening;
+                bank.imageUrl = `images/${req.file.filename}`;
+                await bank.save();
+                req.flash('alertMessage','Success update bank');
+                req.flash('alertStatus','success');
+                res.redirect('/admin/bank');
+            }
+        }catch(error){
+            req.flash('alertMessage',`${error.message}`);
+            req.flash('alertStatus',' danger');
+            res.redirect('/admin/bank');
+        }
+    },
+
     deleteBank : async (req, res) => {
         try{
             const {id} = req.params;
             const bank = await Bank.findOne({_id: id});
+            await fs.unlink(path.join(`public/${bank.imageUrl}`));
             await bank.remove();
             req.flash('alertMessage','Success delete bank');
             req.flash('alertStatus','success');

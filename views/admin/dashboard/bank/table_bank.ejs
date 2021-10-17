@@ -21,14 +21,24 @@
                     <% for( let bank = 0; bank < banks.length; bank++ ) { %>
                         <tr>
                             <td><%= bank + 1 %></td>
-                            <td><%= banks[bank].name %></td>
-                            <td><%= banks[bank].nomorRekening %></td>
                             <td><%= banks[bank].nameBank %></td>
+                            <td><%= banks[bank].nomorRekening %></td>
+                            <td><%= banks[bank].name %></td>
                             <td>
                                 <img src="http://localhost:3300/<%= banks[bank].imageUrl %>" alt="imageUrl" height="70px" width="70px">
                             </td>
                             <td>
                                 <form action="/admin/bank/<%= banks[bank].id %>?_method=DELETE" method="post">
+                                    <a href="javascript:void()"
+                                        data-id="<%= banks[bank].id %>"
+                                        data-name= "<%= banks[bank].name %>"
+                                        data-namebank= "<%= banks[bank].nameBank %>"
+                                        data-nomorrekening= "<%= banks[bank].nomorRekening %>"
+                                        type="button"
+                                        class="btn btn-sm btn-circle btn-warning button-update"
+                                        >
+                                        <i class="fa fa-edit"></i>
+                                    </a>
                                     <button type="submit" class="btn btn-sm btn-circle btn-danger">
                                         <i class="fa fa-trash"></i>
                                     </button>
