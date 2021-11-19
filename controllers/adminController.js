@@ -341,16 +341,17 @@ module.exports = {
 
    viewDetailItem : async (req, res) => {
         const { itemId } = req.params;
-        console.log(req.params);
-        console.log(itemId);
         try{
+        // feature berdsarkan item id
+        const features = await Feature.find({itemId : itemId});
         const alertMessage = req.flash('alertMessage');
         const alertStatus = req.flash('alertStatus');
         const alert = {message: alertMessage, status: alertStatus};
         res.render('admin/item/detail-item/view_detail_item',{
             title: 'Staycation | Detail',
             alert,
-            itemId
+            itemId,
+            features
         });
        }catch(error){
         req.flash('alertMessage',`${error.message}`);
@@ -385,6 +386,60 @@ module.exports = {
       req.flash('alertMessage', `${error.message}`);
       req.flash('alertStatus', 'danger');
       res.redirect(`/admin/item/show-detail-item/${itemId}`);
+    }
+  },
+
+  editFeature : async (req, res) => {
+      try{
+        const {id , name, qty, itemId} = req.body;
+        const feature = await Feature.findOne({_id : id});
+        if(req.file == undefined) {
+            feature.name = name;
+            feature.qty = qty
+            await feature.save();
+            req.flash('alertMessage','Success update bank');
+            req.flash('alertStatus','success');
+            res.redirect(`/admin/item/show-detail-item/${itemId}`);
+        } else {
+            await fs.unlink(path.join(`public/${feature.imageUrl}`));
+            feature.name = name;
+            feature.qty = qty
+            feature.imageUrl = `images/${req.file.filename}`;
+            await feature.save();
+            req.flash('alertMessage','Success update bank');
+            req.flash('alertStatus','success');
+            res.redirect(`/admin/item/show-detail-item/${itemId}`);
+        }
+      }catch(error){
+        req.flash('alertMessage', `${error.message}`);
+        req.flash('alertStatus', 'danger');
+        res.redirect(`/admin/item/show-detail-item/${itemId}`);  
+      }
+  },
+
+  deleteFeature : async (req, res) => {
+    const {id , itemId} = req.params;
+    try{
+        const feature = await Feature.findOne({ _id: id });
+
+        // ambil itemnya juga karena ingin hapus featuredId dalam collection items
+        const item = await Item.findOne({ _id: itemId }).populate('featureId');
+        // cek featureId yang akan dihapus
+        for(let i = 0; i < item.featureId.length; i++){
+            if(item.featureId[i]._id.toString() ===  feature._id.toString()){
+                item.featureId.pull({ _id: feature.id });
+                await item.save();
+            }
+        }
+        await fs.unlink(path.join(`public/${feature.imageUrl}`));
+        await feature.remove();
+        req.flash('alertMessage','Success delete feature');
+        req.flash('alertStatus','success');
+        res.redirect(`/admin/item/show-detail-item/${itemId}`);
+    }catch(error){
+        req.flash('alertMessage', `${error.message}`);
+        req.flash('alertStatus', 'danger');
+        res.redirect(`/admin/item/show-detail-item/${itemId}`); 
     }
   },
 

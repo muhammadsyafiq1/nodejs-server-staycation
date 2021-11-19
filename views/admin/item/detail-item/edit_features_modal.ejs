@@ -9,19 +9,15 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form action="/admin/bank?_method=PUT" method="post" enctype="multipart/form-data">
+        <form action="/admin/item/feature/edit?_method=PUT" method="post" enctype="multipart/form-data">
             <div class="modal-body">
-                <div class="form-group">
-                    <label for="nameBank">Name bank</label>
-                    <input type="text" name="nameBank" id="nameBank" class="form-control nameBank" required>
-                </div>
-                <div class="form-group">
-                    <label for="nomorRekening">No rekening</label>
-                    <input type="text" name="nomorRekening" id="nomorRekening" class="form-control nomorRekening" required>
-                </div>
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" name="name" id="name" class="form-control name" required>
+                </div>
+                <div class="form-group">
+                    <label for="qty">QTY</label>
+                    <input type="text" name="qty" id="qty" class="form-control qty" required>
                 </div>
                 <div class="form-group">
                     <label for="image">Image</label>
@@ -29,7 +25,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <input type="hidden" name="id" class="id">
+                    <input type="hidden" value="<%= itemId %>" name="itemId">
+                    <input type="hidden" name="id" class="id">
                 <button type="submit" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Save</button>
             </div>
