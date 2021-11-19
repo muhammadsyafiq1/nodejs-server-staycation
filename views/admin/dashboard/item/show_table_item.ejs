@@ -22,14 +22,10 @@
                                 <td><%= items[item].country %></td>
                                 <td><%= items[item].city %></td>
                                 <td>
-                                    <form action="/admin/item/<%= items[item].id %>?_method=DELETE" method="post">
+                                    <form action="/admin/item/<%= items[item].id %>/delete?_method=DELETE" method="post">
                                         <a href="/admin/item/show-image/<%= items[item].id %>" class="btn btn-sm btn-circle btn-info"><i class="fa fa-image"></i></a>
-                                        <a href="#" class="btn btn-sm btn-circle btn-success"><i class="fa fa-list"></i></a>
-                                        <a href="javascript:void()" 
-                                            data-id = "<%= items[item].id %>"
-                                            data-name = "<%= items[item].name %>"
-                                            type="button" 
-                                            class="btn btn-sm btn-circle btn-warning button-update"> 
+                                        <a href="/admin/item/show-detail-item/<%= items[item].id %> " class="btn btn-sm btn-circle btn-success"><i class="fa fa-plus"></i></a>
+                                        <a href="/admin/item/<%= items[item].id %>" class="btn btn-sm btn-warning btn-circle" > 
                                             <i class="fa fa-edit"></i> 
                                         </a>
                                         <button type="submit" class="btn btn-sm btn-circle btn-danger">

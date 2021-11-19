@@ -8,7 +8,7 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
 // router admin
 const adminRouter = require('./routes/admin');
 
@@ -37,9 +37,8 @@ app.use(session({
 })); 
 app.use(flash());
 
-
+// index
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 // admin
 app.use('/admin', adminRouter);
 
