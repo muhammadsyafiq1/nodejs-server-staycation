@@ -80,6 +80,7 @@
     </div>
 
     <%- include('edit_features_modal.ejs') %>
+    <%- include('edit_activities_modal.ejs') %>
     <%- include('../../../layouts/js') %>
     <script>
         $(document).ready(function(){
@@ -95,6 +96,17 @@
             $('.name').val(name);
             $('.id').val(id);
             $('.qty').val(qty);
+        });
+
+        $('#dataTableActivity').on('click','.button-update', function(){
+            let id = $(this).data('id');
+            let name = $(this).data('name');
+            let type = $(this).data('type');
+
+            $('#edit-modal-activity').modal('show');
+            $('.name').val(name);
+            $('.id').val(id);
+            $('.type').val(type);
         });
     </script>
 </html>

@@ -1,23 +1,23 @@
 
   <!-- Modal -->
-  <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="edit-modal-activity" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">edit feature</h5>
+          <h5 class="modal-title" id="exampleModalLabel">edit activity</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form action="/admin/item/feature/edit?_method=PUT" method="post" enctype="multipart/form-data">
+        <form action="/admin/item/activity/edit?_method=PUT" method="post" enctype="multipart/form-data">
             <div class="modal-body">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" name="name" id="name" class="form-control name" required>
                 </div>
                 <div class="form-group">
-                    <label for="qty">QTY</label>
-                    <input type="text" name="qty" id="qty" class="form-control qty" required>
+                    <label for="type">Type</label>
+                    <input type="text" name="type" id="type" class="form-control type" required>
                 </div>
                 <div class="form-group">
                     <label for="image">Image</label>

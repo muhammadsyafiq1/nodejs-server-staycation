@@ -30,6 +30,11 @@ router.post('/item/add/feature', upload, adminController.addFeature);
 router.put('/item/feature/edit',upload, adminController.editFeature);
 router.delete('/item/:itemId/feature/delete/:id', adminController.deleteFeature);
 
+// activity
+router.post('/item/add/activity', upload, adminController.addActivity);
+router.put('/item/activity/edit',upload, adminController.editActivity);
+router.delete('/item/:itemId/activity/delete/:id', adminController.deleteActivity);
+
 router.get('/booking', adminController.viewBooking);
 
 module.exports = router;
