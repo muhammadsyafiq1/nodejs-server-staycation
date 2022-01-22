@@ -10,7 +10,11 @@ const bookingSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    ItemId :[{
+    invoice: {
+        type: String,
+        required: true,
+    },
+    ItemId :{
         _id :{
             type: ObjectId,
             ref: 'Item',
@@ -20,34 +24,44 @@ const bookingSchema = new mongoose.Schema({
             type: Number,
             required: true
         },
+        title :{
+            type: String,
+            required: true
+        },
         night :{
             type: Number,
             required: true
         }
-    }],
-    memberId: [{
+    },
+    total: {
+        type: Number,
+        required: true,
+    },
+    memberId: {
         type: ObjectId,
         ref: 'Member'
-    }],
-    bankId: [{
+    },
+    bankId: {
         type: ObjectId,
         ref: 'Bank'
-    }],
-    proofPayment: {
-        type: String,
-        required: true
     },
-    bankFrom: {
-        type: String,
-        required: true
-    },
-    accountHolder: {
-        type: String,
-        required: true
-    },
-    status: {
-        type: String,
-        required: true
+    payments: {
+        proofPayment: {
+            type: String,
+            required: true
+        },
+        bankFrom: {
+            type: String,
+            required: true
+        },
+        accountHolder: {
+            type: String,
+            required: true
+        },
+        status: {
+            type: String,
+            required: true
+        },
     },
 })
 
