@@ -3,16 +3,75 @@ const Bank = require('../models/Bank');
 const Image = require('../models/Image');
 const Feature = require('../models/Feature');
 const Activity = require('../models/Activity');
+const User = require('../models/User');
 const Item = require('../models/Item');
 const fs = require('fs-extra');
 const path = require('path');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
-    // return view
+
+    viewSignin: async (req, res) => {
+        try {
+          const alertMessage = req.flash('alertMessage');
+          const alertStatus = req.flash('alertStatus');
+          const alert = { message: alertMessage, status: alertStatus };
+          if (req.session.user == null || req.session.user == undefined) {
+            res.render('index', {
+              alert,
+              title: "Staycation | Login"
+            });
+          } else {
+            res.redirect('/admin/dashboard');
+          }
+        } catch (error) {
+          res.redirect('/admin/signin');
+        }
+      },
+
+    actionSignin: async (req, res) => {
+        try {
+          const { name, password } = req.body;
+          const user = await User.findOne({ name: name });
+          if (!user) {
+            req.flash('alertMessage', 'User yang anda masukan tidak ada!!');
+            req.flash('alertStatus', 'danger');
+            return res.redirect('/admin/signin');
+          }
+          const isPasswordMatch = await bcrypt.compare(password, user.password);
+          if (!isPasswordMatch) {
+            req.flash('alertMessage', 'Password yang anda masukan tidak cocok!!');
+            req.flash('alertStatus', 'danger');
+            return res.redirect('/admin/signin');
+          }
+
+          req.session.user = {
+              id: user.id,
+              name: user.name
+          }
+
+            res.redirect('/admin/dashboard');
+    
+        } catch (error) {
+            return res.redirect('/admin/signin');
+        }
+    },
+
+    actionLogout: (req, res) => {
+        req.session.destroy();
+        res.redirect('/admin/signin');
+      },
+
+    // return view dashboard 
     viewDashboard: (req, res) => {
-        res.render('admin/dashboard/view_dashboard', {
-            title: "Staycation | Dashboard"
-        });
+        try{
+            res.render('admin/dashboard/view_dashboard', {
+                title: "Staycation | Dashboard",
+                user: req.session.user
+            });
+        }catch(error){
+            res.redirect('/admin/dashboard');
+        }
     },
 
     viewCategory: async (req, res) => {
@@ -23,9 +82,11 @@ module.exports = {
             const alertMessage = req.flash('alertMessage');
             const alertStatus = req.flash('alertStatus');
             const alert = {message: alertMessage, status: alertStatus};
+            
             // return view
             res.render('admin/dashboard/category/view_category', {
                 categories,
+                user: req.session.user,
                 alert,
                 title: "Staycation | Category"
             });
@@ -99,7 +160,8 @@ module.exports = {
             res.render('admin/dashboard/bank/view_bank', {
                 alert,
                 title: "Staycation | Bank",
-                banks
+                banks,
+                user: req.session.user
             });
        }catch(error){
             res.redirect('/admin/bank')
@@ -138,7 +200,7 @@ module.exports = {
                 req.flash('alertStatus','success');
                 res.redirect('/admin/bank');
             } else {
-                await fs.unlink(path.join(`public/${bank.imageUrl}`));
+                await fs.unlink(path.join(`public/images/${bank.imageUrl}`));
                 bank.name = name;
                 bank.nameBank = nameBank;
                 bank.nomorRekening = nomorRekening;
@@ -159,7 +221,7 @@ module.exports = {
         try{
             const {id} = req.params;
             const bank = await Bank.findOne({_id: id});
-            await fs.unlink(path.join(`public/${bank.imageUrl}`));
+            await fs.unlink(path.join(`public/images/${bank.imageUrl}`));
             await bank.remove();
             req.flash('alertMessage','Success delete bank');
             req.flash('alertStatus','success');
@@ -186,6 +248,7 @@ module.exports = {
             categories,
             alert,
             items,
+            user: req.session.user,
             action : 'view',
         });
       }catch(error){
@@ -240,7 +303,8 @@ module.exports = {
             title: "Staycation | Show Image Item",
             alert,
             item,
-            action: 'show image'
+            user: req.session.user,
+            action: 'show image',
         });
        }catch(error){
         req.flash('alertMessage',`${error.message}`);
@@ -265,7 +329,8 @@ module.exports = {
             alert,
             categories,
             item,
-            action : 'edit'
+            action : 'edit',
+            user: req.session.user
         });
        }catch(error) {
         req.flash('alertMessage', `${error.message}`);
@@ -354,7 +419,8 @@ module.exports = {
             alert,
             itemId,
             features,
-            activities
+            activities,
+            user: req.session.user
         });
        }catch(error){
         req.flash('alertMessage',`${error.message}`);
@@ -532,7 +598,8 @@ module.exports = {
 
    viewBooking: (req, res) => {
        res.render('admin/dashboard/booking/view_booking', {
-           title: "Staycation | booking"
+           title: "Staycation | booking",
+           user: req.session.user
        });
    }
 }
