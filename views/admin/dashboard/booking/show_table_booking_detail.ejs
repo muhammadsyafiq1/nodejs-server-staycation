@@ -8,19 +8,21 @@
         <div class="row">
             <div class="col-lg-4">
                 <img src="http://localhost:3300/<%= booking.payments.proofPayment %>" alt="imageUrl" style="width: 100%; display:block">
-                <form action="/admin/booking/<%= booking.id %>/confirmation?_method=PUT" method="post">
-                    <button type="submit" class="btn btn-sm btn-block btn-success mb-2">
-                        <i class="fa fa-check"></i>
-                        Confirmation
-                    </button>
-                </form>
-
-                <form action="/admin/booking/<%= booking.id %>/REJECT?_method=PUT" method="post">
-                    <button type="submit" class="btn btn-sm btn-block btn-danger">
-                        <i class="fa fa-times"></i>
-                        Reject
-                    </button>
-                </form>
+                <%if(booking.payments.status == 'Proses') { %>
+                    <form action="/admin/booking/<%= booking.id %>/confirmation?_method=PUT" method="post">
+                        <button type="submit" class="btn btn-sm btn-block btn-success mb-2">
+                            <i class="fa fa-check"></i>
+                            Confirmation
+                        </button>
+                    </form>
+    
+                    <form action="/admin/booking/<%= booking.id %>/REJECT?_method=PUT" method="post">
+                        <button type="submit" class="btn btn-sm btn-block btn-danger">
+                            <i class="fa fa-times"></i>
+                            Reject
+                        </button>
+                    </form>
+                <% } %>
             </div>
             <div class="col-lg-8">
                 <!-- table -->
