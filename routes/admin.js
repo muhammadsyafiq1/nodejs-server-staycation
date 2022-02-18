@@ -41,7 +41,10 @@ router.post('/item/add/activity', upload, adminController.addActivity);
 router.put('/item/activity/edit',upload, adminController.editActivity);
 router.delete('/item/:itemId/activity/delete/:id', adminController.deleteActivity);
 
+// booking
 router.get('/booking', adminController.viewBooking);
 router.get('/booking/:id', adminController.showDetailBooking);
+router.put('/booking/:id/confirmation', adminController.actionConfirmation);
+router.put('/booking/:id/reject', adminController.actionReject);
 
 module.exports = router;
