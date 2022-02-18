@@ -612,8 +612,25 @@ module.exports = {
        }catch(error){
         req.flash('alertMessage', `${error.message}`);
         req.flash('alertStatus', 'danger');
-        res.redirect('/admin/booking');
+        res.redirect('/admin/dashboard/booking');
        }
        
+   },
+
+   showDetailBooking : async(req, res) => {
+       const {id} = req.params;
+       try{
+        const booking = await Booking.findOne({_id: id})
+            .populate('memberId')
+            .populate('bankId');
+        console.log(booking);
+        res.render('admin/dashboard/booking/show_detail_booking', {
+            title: "Staycation | Detail",
+            user: req.session.user,
+            booking
+        });
+       }catch{
+
+       }
    }
 }
