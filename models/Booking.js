@@ -14,7 +14,7 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    ItemId :{
+    itemId :{
         _id :{
             type: ObjectId,
             ref: 'Item',
@@ -28,7 +28,7 @@ const bookingSchema = new mongoose.Schema({
             type: String,
             required: true
         },
-        durattion :{
+        duration :{
             type: Number,
             required: true
         }

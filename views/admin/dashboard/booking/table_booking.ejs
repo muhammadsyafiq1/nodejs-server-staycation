@@ -10,12 +10,33 @@
                         <th>No</th>
                         <th>Date</th>
                         <th>Title</th>
-                        <th>Name Member</th>
                         <th>Name Bank</th>
+                        <th>Name Member</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
+                <tbody>
+                    <% for(let booking = 0; booking < bookings.length; booking++) { %>
+                        <tr>
+                            <td><%= booking + 1 %></td>
+                            <td>
+                                <%= bookings[booking].bookingStartDate.toLocaleString().split(',')[0] %> s/d <br>
+                                <%= bookings[booking].bookingEndDate.toLocaleString().split(',')[0] %>
+                            </td>
+                            <td><%= bookings[booking].itemId.title %></td>
+                            <td><%= bookings[booking].bankId.nameBank %></td>
+                            <td><%= bookings[booking].memberId.firstName %></td>
+                            <td><%= bookings[booking].payments.status %></td>
+                            <td>
+                                <a href="#"
+                                    class="btn btn-sm btn-circle btn-success"> 
+                                    <i class="fa fa-eye"></i> 
+                                </a>
+                            </td>
+                        </tr>
+                    <% } %>
+                </tbody>
             </table>
         </div>
     </div>

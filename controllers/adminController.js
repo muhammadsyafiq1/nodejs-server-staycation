@@ -1,10 +1,12 @@
 const Category = require('../models/Category');
 const Bank = require('../models/Bank');
+const Member = require('../models/Member');
 const Image = require('../models/Image');
 const Feature = require('../models/Feature');
 const Activity = require('../models/Activity');
 const User = require('../models/User');
 const Item = require('../models/Item');
+const Booking = require('../models/Booking');
 const fs = require('fs-extra');
 const path = require('path');
 const bcrypt = require('bcryptjs');
@@ -596,10 +598,22 @@ module.exports = {
       },
 
 
-   viewBooking: (req, res) => {
-       res.render('admin/dashboard/booking/view_booking', {
-           title: "Staycation | booking",
-           user: req.session.user
-       });
+   viewBooking: async (req, res) => {
+       try{
+        const bookings = await Booking.find()
+            .populate('memberId')
+            .populate('bankId');
+            console.log(bookings);
+        res.render('admin/dashboard/booking/view_booking', {
+            title: "Staycation | booking",
+            user: req.session.user,
+            bookings
+        });
+       }catch(error){
+        req.flash('alertMessage', `${error.message}`);
+        req.flash('alertStatus', 'danger');
+        res.redirect('/admin/booking');
+       }
+       
    }
 }
