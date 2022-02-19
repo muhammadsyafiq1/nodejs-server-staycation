@@ -14,6 +14,10 @@ const itemSchema = new mongoose.Schema({
         type: String,
         default: 'Indonesia',
     },
+    unit: {
+        type: String,
+        default: 'night',
+    },
     city: {
         type: String,
         required: true,
