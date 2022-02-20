@@ -1,6 +1,7 @@
 const Item = require('../models/Item')
 const Booking = require('../models/Booking')
 const Treasure = require('../models/Activity')
+const Category = require('../models/Category')
 
 module.exports = {
     landingPage : async (req, res) => {
@@ -10,9 +11,23 @@ module.exports = {
                 .limit(5)
                 .populate({ path: 'imageId', select:'_id imageUrl' })
 
-                const traveler = await Booking.find()
-                const treasure = await Treasure.find()
-                const city = await Item.find()
+            const category = await Category.find()
+                .select('_id name')
+                .limit(3)
+                .populate({
+                    path: 'itemId',
+                    select: '_id title country city isPopular imageId',
+                    perDocumentLimit: 4,
+                    populate: {
+                        path: 'imageId',
+                        select: '_id imageUrl',
+                        perDocumentLimit: 1
+                    }
+                })
+
+            const traveler = await Booking.find()
+            const treasure = await Treasure.find()
+            const city = await Item.find()
 
             res.status(200).json({ 
                 hero : {
@@ -20,7 +35,8 @@ module.exports = {
                     treasures: treasure.length,
                     cities: city.length
                 },
-                mostPicked
+                mostPicked,
+                category
              })
         }catch(error){
 
